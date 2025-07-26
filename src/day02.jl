@@ -11,7 +11,32 @@ end
 
 function solve(input_dir, day)
     input = load_input(input_dir, day)
-    println(input, day)
+    input = split(input, ',')
+    raw = parse.(Int, input)
+
+    # replace pos 1 with val 12
+    raw[1+1] = 12
+    # replace pos 2 with val 2
+    raw[2+1] = 2
+    prog = Program(
+        raw, 
+        tokenizer.(input)
+    )
+    stop = false
+    
+    for instructions in partition(prog.tokenized, 4)
+        #println("\n\n",instructions)
+        ex = Executor(instructions...)
+        stop = execute(
+            prog,
+            ex
+        )
+        if stop
+            break
+        end
+    end
+    
+    println("value at Position 0  $(prog.raw[1])")
 
 end
 
@@ -103,7 +128,7 @@ function execute(prog::Program,ex::Executor)::Bool
         first_val,
         second_val
         )
-    println("Read: $(first_val) $(op) $(second_val) = $(result)")
+    #println("Read: $(first_val) $(op) $(second_val) = $(result)")
     write_raw!(
         prog, 
         inner(ex.third),
@@ -131,10 +156,13 @@ function testing()
     for instructions in partition(prog.tokenized, 4) 
         println("\n\n",instructions)
         ex = Executor(instructions...)
-        execute(
+        stop = execute(
             prog,
             ex
         )
+        if stop
+            break
+        end
     end
     
     println("\n$(prog.raw)\n")

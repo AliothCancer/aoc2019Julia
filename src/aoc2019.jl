@@ -11,8 +11,8 @@ using .Day02
 input_dir = joinpath(@__DIR__, "..", "input")
 
 #Day01.solve(input_dir,1)
-Day02.testing()
-#Day02.solve(input_dir, 2)
+#Day02.testing()
+Day02.solve(input_dir, 2)
 
 
 
